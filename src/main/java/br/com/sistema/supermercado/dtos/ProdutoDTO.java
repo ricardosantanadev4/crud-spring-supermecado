@@ -1,39 +1,24 @@
-package br.com.sistema.supermercado.models;
+package br.com.sistema.supermercado.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import br.com.sistema.supermercado.models.Fabricante;
+import br.com.sistema.supermercado.models.Produto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+public class ProdutoDTO {
 
-@Entity
-public class Produto {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String categoria;
 	private Double valor;
-
-	@ManyToOne
-	@JoinColumn(name = "fabricante_id")
-	@JsonIgnore
 	private Fabricante fabricante;
-
 	private String validade;
 
-	public Produto() {
-	}
-
-	public Produto(String nome, String categoria, Double valor, Fabricante fabricante, String validade) {
-		this.nome = nome;
-		this.categoria = categoria;
-		this.valor = valor;
-		this.fabricante = fabricante;
-		this.validade = validade;
+	public ProdutoDTO(Produto produto) {
+		this.id = produto.getId();
+		this.nome = produto.getNome();
+		this.categoria = produto.getCategoria();
+		this.valor = produto.getValor();
+		this.fabricante = produto.getFabricante();
+		this.validade = produto.getValidade();
 	}
 
 	public Long getId() {

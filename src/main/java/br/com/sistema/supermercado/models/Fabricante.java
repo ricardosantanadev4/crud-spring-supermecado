@@ -1,6 +1,9 @@
 package br.com.sistema.supermercado.models;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +19,15 @@ public class Fabricante {
 	private String nome;
 
 	@OneToMany(mappedBy = "fabricante")
-	private List<Produto> produto;
+	@JsonIgnore
+	private List<Produto> produto = new ArrayList<>();
+
+	public Fabricante() {
+	}
+
+	public Fabricante(String nome) {
+		this.nome = nome;
+	}
 
 	public Long getId() {
 		return id;

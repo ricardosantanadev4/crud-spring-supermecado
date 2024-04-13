@@ -12,9 +12,10 @@ import br.com.sistema.supermercado.models.Produto;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
-	List<Produto> findByFabricante(Fabricante fabricante);
+	@Query("SELECT obj FROM Produto obj WHERE LOWER(obj.nome) LIKE %?1% OR LOWER(obj.categoria) LIKE %?1%")
+	public List<Produto> findAllByParm(String param);
 
-	@Query("SELECT obj FROM Produto obj WHERE LOWER(obj.nome) LIKE %?1% or LOWER(obj.categoria) LIKE %?1%")
-	List<Produto> findAllByParm(String param);
+	@Query("SELECT obj FROM Produto obj WHERE obj.fabricante = ?1%")
+	public List<Produto> findAllByFabricante(Fabricante fabricante);
 
 }

@@ -17,11 +17,12 @@ import br.com.sistema.supermercado.repositorys.ProdutoRepository;
 public class ProdutoService {
 
 	private final ProdutoRepository produtoRepository;
-	private final FabricanteRepository fabricanteRepository;
+	private final FabricanteService fabricanteService;
 
-	public ProdutoService(ProdutoRepository produtoRepository, FabricanteRepository fabricanteRepository) {
+	public ProdutoService(ProdutoRepository produtoRepository, FabricanteRepository fabricanteRepository,
+			FabricanteService fabricanteService) {
 		this.produtoRepository = produtoRepository;
-		this.fabricanteRepository = fabricanteRepository;
+		this.fabricanteService = fabricanteService;
 	}
 
 	@GetMapping
@@ -30,17 +31,22 @@ public class ProdutoService {
 			return this.produtoRepository.findAll().stream().map(p -> new ProdutoDTO(p)).collect(Collectors.toList());
 		}
 
-		List<Produto> getProdutoByFabricante = new ArrayList<>();
-		List<Fabricante> getFabricante = this.fabricanteRepository.findByNomeContainingIgnoreCase(param);
-		getFabricante.stream().forEach(
-				fabricante -> getProdutoByFabricante.addAll(this.produtoRepository.findByFabricante(fabricante)));
-		List<Produto> getProduto = this.produtoRepository.findAllByParm(param);
+		List<Produto> getProduto = this.produtoRepository.findAllByParm(param.toLowerCase());
+		if (getProduto.isEmpty()) {
+			List<Fabricante> getFabricante = this.fabricanteService.finAllByNomeContainingIgnoreCase(param);
 
-		if (getFabricante.isEmpty() && getProdutoByFabricante.isEmpty()) {
-			return getProduto.stream().map(produto -> new ProdutoDTO(produto)).collect(Collectors.toList());
+			if (getFabricante.isEmpty()) {
+				return new ArrayList<>();
+			}
+
+			List<Produto> getProdutoByFabricante = new ArrayList<>();
+			getFabricante.stream().forEach(fabricante -> getProdutoByFabricante
+					.addAll(this.produtoRepository.findAllByFabricante(fabricante)));
+
+			return getProdutoByFabricante.stream().map(produto -> new ProdutoDTO(produto)).collect(Collectors.toList());
 		}
 
-		return getProdutoByFabricante.stream().map(produto -> new ProdutoDTO(produto)).collect(Collectors.toList());
+		return getProduto.stream().map(produto -> new ProdutoDTO(produto)).collect(Collectors.toList());
 	}
 
 }

@@ -21,7 +21,7 @@ public class FabricanteController {
 	}
 
 	@GetMapping
-	public List<Fabricante> findByNomeContaining(@RequestParam String nome) {
-		return this.fabricanteService.findByNomeContainingIgnoreCase(nome);
+	public List<Fabricante> findByNomeContainingIgnoreCase(String param) {
+		return this.fabricanteService.finAllByNomeContainingIgnoreCase(param);
 	}
 }

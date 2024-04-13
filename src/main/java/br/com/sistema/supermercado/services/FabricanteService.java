@@ -16,11 +16,7 @@ public class FabricanteService {
 		this.fabricanteRepository = fabricanteRepository;
 	}
 
-	public Fabricante findById(Long id) {
-		return this.fabricanteRepository.findById(id).orElseThrow();
-	}
-
-	public List<Fabricante> findByNomeContainingIgnoreCase(String nome) {
-		return this.fabricanteRepository.findByNomeContainingIgnoreCase(nome);
+	public List<Fabricante> finAllByNomeContainingIgnoreCase(String param) {
+		return this.fabricanteRepository.finAllByNomeContainingIgnoreCase(param.toLowerCase());
 	}
 }
